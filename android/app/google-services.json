@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "810574724125",
+    "project_id": "chat-jet-34c03",
+    "storage_bucket": "chat-jet-34c03.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810574724125:android:4ff7399bf5f9e6d3461af4",
+        "android_client_info": {
+          "package_name": "com.example.chat_jet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkL4vSmF_0xA3dnJYqlBgt2nZfFcan9Pk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
