@@ -1,7 +1,13 @@
 
+import 'package:chat_jet/helper/helper_function.dart';
 import 'package:chat_jet/screens/authenticate/register.dart';
+import 'package:chat_jet/screens/home/home.dart';
+import 'package:chat_jet/services/auth.dart';
+import 'package:chat_jet/services/database_service.dart';
 import 'package:chat_jet/shared/loading.dart';
 import 'package:chat_jet/widgets/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +24,7 @@ class _SignInState extends State<SignIn> {
   String email ='';
   String password = "";
   final formKey = GlobalKey<FormState>();
+  AuthService auth = AuthService();
   @override
   Widget build(BuildContext context) {
     return loading? const Loading(): Scaffold(
@@ -153,9 +160,33 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  login(){
+  login() async {
     if(formKey.currentState!.validate()){
+      if(formKey.currentState!.validate()){
+      setState(() {
+        loading = true;
+      });
+      await auth.loginWithEmailandPassword(email, password)
+      .then((value) async{
+        if(value == true){
+          QuerySnapshot snapshot = await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).gettingUserData(email);
 
+          // saving the values to our shared preferences
+          await HelperFunctions.getUserLoggedInStatus(true);
+          await HelperFunctions.saveUserEmailSF(email);
+          await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
+          // ignore: use_build_context_synchronously
+          nextScreenReplace(context, const HomePage());
+
+        }
+        else{
+          showSnackBar(context, Colors.red, value);
+          setState(() {
+            loading=false;
+          });
+        }
+      });
     }
   }
-}
+    }
+  }

@@ -1,4 +1,6 @@
+import 'package:chat_jet/helper/helper_function.dart';
 import 'package:chat_jet/screens/authenticate/sign_in.dart';
+import 'package:chat_jet/services/auth.dart';
 import 'package:chat_jet/shared/loading.dart';
 import 'package:chat_jet/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
@@ -19,6 +21,7 @@ class _RegisterState extends State<Register> {
   String email ='';
   String password ="";
   String username = '';
+  AuthService auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -178,9 +181,29 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
-  register(){
+  register() async{
     if(formKey.currentState!.validate()){
+      setState(() {
+        loading = true;
+      });
+      await auth.registerWithEmailandPassword(username, email, password)
+      .then((value) async{
+        if(value == true){
+          // saving the shared prefernces state
+          await HelperFunctions.saveUserLoggedInStatus(true);
+          await HelperFunctions.saveUserNameSF(username);
+          await HelperFunctions.saveUserEmailSF(email);
+          // ignore: use_build_context_synchronously
+          nextScreenReplace(context, 'HomePage()');
 
+        }
+        else{
+          showSnackBar(context, Colors.red, value);
+          setState(() {
+            loading=false;
+          });
+        }
+      });
     }
   }
 }
