@@ -1,23 +1,25 @@
-
-import 'package:chat_jet/screens/authenticate/register.dart';
+import 'package:chat_jet/screens/authenticate/sign_in.dart';
 import 'package:chat_jet/shared/loading.dart';
 import 'package:chat_jet/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
 
+
+  final formKey = GlobalKey<FormState>();
   bool loading = false;
   String email ='';
-  String password = "";
-  final formKey = GlobalKey<FormState>();
+  String password ="";
+  String username = '';
+
   @override
   Widget build(BuildContext context) {
     return loading? const Loading(): Scaffold(
@@ -35,7 +37,7 @@ class _SignInState extends State<SignIn> {
                   fontSize: 40,fontWeight: FontWeight.bold
                 ),),
                 const SizedBox(height: 10,),
-                const Text('Login now to see what they are talking',
+                const Text('Create your account now to chat and explore',
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.black38
@@ -45,6 +47,29 @@ class _SignInState extends State<SignIn> {
                 height: 180,),
 
                 const SizedBox(height: 30,),
+                TextFormField(
+                  decoration: textInputDecoration.copyWith(
+                    labelText: 'Username',
+                    prefixIcon: Icon(Icons.person,
+                    color: Theme.of(context).primaryColor,)
+                  ),
+                  onChanged: (value){
+                    setState(() {
+                      username = value;
+                    });
+                  },
+                  validator: (val) {
+                            if(val!.isEmpty){
+                              return 'Please Enter a username';
+                            }
+                            else{
+                              return null;
+                            }
+                          },
+                ),
+                
+
+                const SizedBox(height: 20,),
                 TextFormField(
                   decoration: textInputDecoration.copyWith(
                     labelText: 'Email',
@@ -64,6 +89,7 @@ class _SignInState extends State<SignIn> {
                                 : "Please enter a valid email";
                           },
                 ),
+                
 
                 const SizedBox(height: 20,),
                 TextFormField(
@@ -89,20 +115,20 @@ class _SignInState extends State<SignIn> {
 
                 const SizedBox(height: 20,),
 
-                SigninButton(context, "Sign In"),
+                SignUpButton(context, "Register"),
                 
                 const SizedBox(height: 10,),
                 Text.rich(
-                  TextSpan(text: "Don't have an account ",
+                  TextSpan(text: "Already have an account? ",
                   style: const TextStyle(
                     color: Colors.black,fontSize: 14
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                      text: ' Register here',
+                      text: ' Login',
                       style: const TextStyle(color: Colors.blue),
                       recognizer: TapGestureRecognizer()..onTap =(){
-                        nextScreen(context, Register());
+                        nextScreen(context, const SignIn());
                       }
                     )
                   ]),
@@ -114,11 +140,11 @@ class _SignInState extends State<SignIn> {
       ),
     );
   }
-   Widget SigninButton(BuildContext context,String label){
+  Widget SignUpButton(BuildContext context,String label){
     return InkWell(
       onTap: () async{
 
-        login();
+        register();
         // setState(() {
         //   loading = true;
         // });
@@ -152,8 +178,7 @@ class _SignInState extends State<SignIn> {
       ),
     );
   }
-
-  login(){
+  register(){
     if(formKey.currentState!.validate()){
 
     }
