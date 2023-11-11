@@ -78,4 +78,13 @@ class DatabaseService{
     return groupCollection.doc(groupId).snapshots();
   }
 
+
+  // search 
+  searchByName(String groupName){
+    return groupCollection.where('groupName',isEqualTo: groupName).get();
+  }
+
+  // function -> bool
+  
+
 }
