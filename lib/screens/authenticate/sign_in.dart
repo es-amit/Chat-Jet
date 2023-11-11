@@ -172,7 +172,7 @@ class _SignInState extends State<SignIn> {
           QuerySnapshot snapshot = await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).gettingUserData(email);
 
           // saving the values to our shared preferences
-          await HelperFunctions.getUserLoggedInStatus(true);
+          await HelperFunctions.saveUserLoggedInStatus(true);
           await HelperFunctions.saveUserEmailSF(email);
           await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
           // ignore: use_build_context_synchronously
@@ -180,7 +180,7 @@ class _SignInState extends State<SignIn> {
 
         }
         else{
-          showSnackBar(context, Colors.red, value);
+          showSnackbar(context, Colors.red, value);
           setState(() {
             loading=false;
           });

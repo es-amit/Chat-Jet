@@ -7,5 +7,5 @@ class Constants{
   static String messagingSenderId ="810574724125";
   static String projectId = "chat-jet-34c03";
 
-  final primaryColor = Color.fromARGB(255, 82, 211, 86);
+  final primaryColor = const Color.fromARGB(255, 82, 211, 86);
   }

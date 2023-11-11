@@ -1,5 +1,6 @@
 import 'package:chat_jet/helper/helper_function.dart';
 import 'package:chat_jet/screens/authenticate/sign_in.dart';
+import 'package:chat_jet/screens/home/home.dart';
 import 'package:chat_jet/services/auth.dart';
 import 'package:chat_jet/shared/loading.dart';
 import 'package:chat_jet/widgets/widgets.dart';
@@ -143,21 +144,11 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
+  // ignore: non_constant_identifier_names
   Widget SignUpButton(BuildContext context,String label){
     return InkWell(
       onTap: () async{
-
         register();
-        // setState(() {
-        //   loading = true;
-        // });
-        // dynamic result = await _auth.signInWithEmailAndPassword(_email.text, _password.text);
-        // if(result == null){
-        //   setState(() {
-        //     loading = false;
-        //     error = 'please supply a valid email';
-        //   });
-        // }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 5,vertical: 0.0),
@@ -194,11 +185,12 @@ class _RegisterState extends State<Register> {
           await HelperFunctions.saveUserNameSF(username);
           await HelperFunctions.saveUserEmailSF(email);
           // ignore: use_build_context_synchronously
-          nextScreenReplace(context, 'HomePage()');
+          nextScreenReplace(context, const HomePage());
 
         }
         else{
-          showSnackBar(context, Colors.red, value);
+
+          showSnackbar(context, Colors.redAccent, value);
           setState(() {
             loading=false;
           });
