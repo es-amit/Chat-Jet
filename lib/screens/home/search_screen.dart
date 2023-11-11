@@ -16,7 +16,7 @@ class _SearchPageState extends State<SearchPage> {
   
   String userName='';
   User? user;
-
+  bool isJoined = false;
   bool loading = false;
   QuerySnapshot? searchSnapshot;
   bool hasUserSearched= false;
@@ -24,9 +24,17 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUserIdandName();
+  }
+
+  // String manipulation
+  String getId(String res){
+    return res.substring(0,res.indexOf("_"));
+  }
+
+  String getName(String res){
+    return res.substring(res.indexOf("_")+1);
   }
 
   getCurrentUserIdandName() async{
@@ -99,7 +107,7 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
           ),
-          loading ? Loading() : groupList()
+          loading ? const Loading() : groupList()
         ],
       ),
     );
@@ -111,11 +119,12 @@ class _SearchPageState extends State<SearchPage> {
         loading = true;
       });
       await DatabaseService().searchByName(searchController.text).then((snapshot){
-        searchSnapshot = snapshot;
         setState(() {
+          searchSnapshot = snapshot;
           loading =false;
+          hasUserSearched = true;
         });
-        hasUserSearched = true;
+        
       });
     }
 
@@ -135,9 +144,69 @@ class _SearchPageState extends State<SearchPage> {
       }): Container();
   }
 
+  joinedOrNot(
+      String userName, String groupId, String groupname, String admin) async {
+    await DatabaseService(uid: user!.uid)
+        .isUserJoined(groupname, groupId, userName)
+        .then((value) {
+      setState(() {
+        isJoined = value;
+      });
+    });
+  }
+
   Widget groupTile(String userName,String groupId, String groupName,String admin){
-    return Text('hello');
 
+    // function to check whether user already exits in group
+    joinedOrNot(userName,groupId,groupName,admin);
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+      leading: CircleAvatar(
+        backgroundColor: Theme.of(context).primaryColor,
+        radius: 30,
+        child: Text(groupName.substring(0,1),
+        style: const TextStyle(fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Colors.white),),),
 
+        title: Text(groupName,style: const TextStyle(
+          fontWeight: FontWeight.w600,
+        ),),
+        subtitle: Text("Admin: ${getName(admin)}",
+        style: const TextStyle(
+          fontSize: 13
+        ),),
+
+        trailing: InkWell(
+          onTap: (){
+
+          },
+          child: isJoined
+            ? Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.black,
+                  border: Border.all(color: Colors.white, width: 1),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: const Text(
+                  "Joined",
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            : Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Theme.of(context).primaryColor,
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: const Text("Join Now",
+                    style: TextStyle(color: Colors.white)),
+              ),
+      ),
+        
+    );
   }
 }
