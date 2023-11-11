@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                 
               },
               contentPadding: const EdgeInsetsDirectional.symmetric(horizontal: 20,vertical: 5),
-              leading: const Icon(Icons.group),
+              leading: const Icon(Icons.logout),
               title: const Text("Log out",
               style: TextStyle(color: Colors.black),),
             ),

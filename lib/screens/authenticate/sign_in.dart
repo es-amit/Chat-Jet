@@ -109,7 +109,7 @@ class _SignInState extends State<SignIn> {
                       text: ' Register here',
                       style: const TextStyle(color: Colors.blue),
                       recognizer: TapGestureRecognizer()..onTap =(){
-                        nextScreen(context, Register());
+                        nextScreen(context, const Register());
                       }
                     )
                   ]),
@@ -121,6 +121,7 @@ class _SignInState extends State<SignIn> {
       ),
     );
   }
+   // ignore: non_constant_identifier_names
    Widget SigninButton(BuildContext context,String label){
     return InkWell(
       onTap: () async{

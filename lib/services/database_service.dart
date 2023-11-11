@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService{
 
-  final String uid;
-  DatabaseService({required this.uid});
+  final String? uid;
+  DatabaseService({this.uid});
 
 
   CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
@@ -58,5 +58,24 @@ class DatabaseService{
     });
   }
 
+  // gettting the chats
+
+  getChats(String groupId) async{
+    return groupCollection
+    .doc(groupId)
+    .collection('messages')
+    .orderBy("time");
+  }
+
+  Future getGroupAdmin(String groupId) async{
+    DocumentReference d= groupCollection.doc(groupId);
+    DocumentSnapshot documentSnapshot = await d.get();
+    return documentSnapshot['admin'];
+  }
+
+  // get group members
+  getGroupMembers(String groupId) async{
+    return groupCollection.doc(groupId).snapshots();
+  }
 
 }
