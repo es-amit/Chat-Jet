@@ -100,5 +100,42 @@ class DatabaseService{
 
   }
 
+  // toggleing the group join /exit
+  Future toggleGroupJoin(String groupId,String userName,String groupName)async{
+    // doc refernce
+    DocumentReference userdocumentReference = userCollection.doc(uid);
+    DocumentReference groupdocumentReference = groupCollection.doc(groupId);
+
+    DocumentSnapshot documentSnapshot = await userdocumentReference.get();
+    List<dynamic> groups = await documentSnapshot['groups'];
+
+    // if user has our group -> then remove them or also in other part re join them
+    if(groups.contains("${groupId}_$groupName")){
+      await userdocumentReference.update(
+        {
+          'groups': FieldValue.arrayRemove(["${groupId}_$groupName"])
+        }
+      );
+      await groupdocumentReference.update(
+        {
+          'members': FieldValue.arrayRemove(["${uid}_$userName"])
+        }
+      );
+    }
+    else{
+      await userdocumentReference.update(
+        {
+          'groups': FieldValue.arrayUnion(["${groupId}_$groupName"])
+        }
+      );
+      await groupdocumentReference.update(
+        {
+          'members': FieldValue.arrayUnion(["${uid}_$userName"])
+        }
+      );
+
+    }
+  }
+
 
 }

@@ -1,6 +1,8 @@
 import 'package:chat_jet/helper/helper_function.dart';
+import 'package:chat_jet/screens/home/chat.dart';
 import 'package:chat_jet/services/database_service.dart';
 import 'package:chat_jet/shared/loading.dart';
+import 'package:chat_jet/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -178,7 +180,23 @@ class _SearchPageState extends State<SearchPage> {
         ),),
 
         trailing: InkWell(
-          onTap: (){
+          onTap: () async{
+            await DatabaseService(uid: user!.uid).toggleGroupJoin(groupId, userName, groupName);
+            if(isJoined){
+              setState(() {
+                isJoined = !isJoined;
+              });
+              showSnackbar(context, Colors.red, "Successfully joined the group!!");
+              Future.delayed(const Duration(seconds: 2),(){
+                nextScreen(context, ChatPage(userName: userName, groupId: groupId, groupName: groupName));
+              });
+            }
+            else{
+              setState(() {
+                isJoined = !isJoined;
+              });
+              showSnackbar(context, Colors.red, "Left the group $groupName");
+            }
 
           },
           child: isJoined
