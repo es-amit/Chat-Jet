@@ -1,4 +1,6 @@
+import 'package:chat_jet/screens/home/home.dart';
 import 'package:chat_jet/services/database_service.dart';
+import 'package:chat_jet/widgets/widgets.dart';
 // import 'package:chat_jet/shared/loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +53,29 @@ class _GroupInfoState extends State<GroupInfo> {
         ),),
         actions: [
           IconButton(onPressed: (){
-            print('group leaves');
+            showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                 builder: (context){
+                  return AlertDialog(
+                    title: const Text('Exit'),
+                    content: const Text('Are you sure want to exit the group? '),
+                    actions: [
+                      IconButton(onPressed: (){
+                        Navigator.pop(context);
+                      }, icon: const Icon(Icons.cancel),
+                      color: Colors.red,),
+
+                      IconButton(onPressed: ()async{
+                        DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).toggleGroupJoin(widget.groupId, getName(widget.adminName), widget.groupName).whenComplete((){
+                          nextScreen(context, const HomePage());
+                        });
+                        
+                      }, icon: const Icon(Icons.exit_to_app),
+                      color: Colors.green,),
+                    ],
+                  );
+                 });
           }, icon: const Icon(Icons.exit_to_app,
         color: Colors.white,))
         ],

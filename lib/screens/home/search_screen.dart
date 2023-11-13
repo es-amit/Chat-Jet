@@ -186,6 +186,7 @@ class _SearchPageState extends State<SearchPage> {
               setState(() {
                 isJoined = !isJoined;
               });
+              // ignore: use_build_context_synchronously
               showSnackbar(context, Colors.red, "Successfully joined the group!!");
               Future.delayed(const Duration(seconds: 2),(){
                 nextScreen(context, ChatPage(userName: userName, groupId: groupId, groupName: groupName));
@@ -195,6 +196,7 @@ class _SearchPageState extends State<SearchPage> {
               setState(() {
                 isJoined = !isJoined;
               });
+              // ignore: use_build_context_synchronously
               showSnackbar(context, Colors.red, "Left the group $groupName");
             }
 
